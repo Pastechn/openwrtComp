@@ -17,8 +17,8 @@ env:
   REPO_URL: https://github.com/coolsnowwolf/openwrt
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
-  KERNEL_VER: 4.9
-  CONFIG_FILE: 4.9.config
+  KERNEL_OLD: true
+  CONFIG_FILE: .config
   UPLOAD_FIRMWARE: true
   TZ: Asia/Shanghai
 
@@ -51,8 +51,9 @@ jobs:
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
 
     - name: Change kernel version
+      if: env.KERNEL_OLD == 'true'
       run:  |
-        sed -i 's/KERNEL_PATCHVER:=4.19/KERNEL_PATCHVER:='$KERNEL_VER'/g' openwrt/target/linux/x86/Makefile
+        sed -i 's/KERNEL_PATCHVER:=4.19/KERNEL_PATCHVER:=4.14/g' openwrt/target/linux/x86/Makefile
         cat openwrt/target/linux/x86/Makefile
 
     - name: Update feeds
@@ -71,7 +72,7 @@ jobs:
       run: |
         cd openwrt
         make defconfig
-        make download -j1 V=s
+        make download -j8
         find dl -size -1024c -exec ls -l {} \;
         find dl -size -1024c -exec rm -f {} \;
 
