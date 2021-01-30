@@ -2,7 +2,7 @@
 # This file is generated from P3TERX's template
 #
 
-name: Build OpenWrt
+name: Build OpenWrt Stable
 
 on:
   repository_dispatch:
@@ -17,7 +17,8 @@ env:
   REPO_URL: https://github.com/coolsnowwolf/openwrt
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: .config
+  KERNEL_VER: 4.9
+  CONFIG_FILE: 4.9.config
   UPLOAD_FIRMWARE: true
   TZ: Asia/Shanghai
 
@@ -49,8 +50,8 @@ jobs:
         git clone https://github.com/coolsnowwolf/openwrt openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
 
-    - name: Change kernel version
-      run: sed -i 's/KERNEL_PATCHVER:=4.19/KERNEL_PATCHVER:=4.14/g' openwrt/target/linux/x86/Makefile
+    - name: Change kernel version to ${{ env.FILE_DATE }}
+      run: sed -i 's/KERNEL_PATCHVER:=4.19/KERNEL_PATCHVER:='$KERNEL_VER'/g' openwrt/target/linux/x86/Makefile
 
     - name: Update feeds
       run: cd openwrt && ./scripts/feeds update -a
