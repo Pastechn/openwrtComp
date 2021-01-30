@@ -50,7 +50,7 @@ jobs:
         git clone https://github.com/coolsnowwolf/openwrt openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
 
-    - name: Change kernel version to ${{ env.FILE_DATE }}
+    - name: Change kernel version to ${{ env.KERNEL_VER }}
       run: sed -i 's/KERNEL_PATCHVER:=4.19/KERNEL_PATCHVER:='$KERNEL_VER'/g' openwrt/target/linux/x86/Makefile
 
     - name: Update feeds
