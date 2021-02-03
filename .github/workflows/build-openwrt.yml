@@ -8,17 +8,17 @@ on:
   repository_dispatch:
   workflow_dispatch:
     inputs:
-      ssh:
-        description: 'SSH connection to Actions'
-        required: false
-        default: 'false'
+      KERNEL_OLD:
+        description: 'Use 4.14 kernel'
+        required: true
+        default: 'true'
 
 env:
   REPO_URL: https://github.com/coolsnowwolf/openwrt
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
-  KERNEL_OLD: true
   CONFIG_FILE: .config
+  CONFIG_FILE_OLD: 4.14.config
   UPLOAD_FIRMWARE: true
   TZ: Asia/Shanghai
 
@@ -51,10 +51,10 @@ jobs:
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
 
     - name: Change kernel version
-      if: env.KERNEL_OLD == 'true'
+      if: github.event.inputs.KERNEL_OLD == 'true'
       run:  |
         sed -i 's/KERNEL_PATCHVER:=4.19/KERNEL_PATCHVER:=4.14/g' openwrt/target/linux/x86/Makefile
-        cat openwrt/target/linux/x86/Makefile
+        [ -e $CONFIG_FILE_OLD ] && mv $CONFIG_FILE_OLD $CONFIG_FILE
 
     - name: Update feeds
       run: cd openwrt && ./scripts/feeds update -a
