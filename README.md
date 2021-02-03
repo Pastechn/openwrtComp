@@ -10,7 +10,7 @@
 
 - Lean
 
-- PETERX
+- P3TERX
 
 - SuLingGG
 
