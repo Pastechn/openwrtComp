@@ -56,14 +56,17 @@ jobs:
         sed -i 's/KERNEL_PATCHVER:=4.19/KERNEL_PATCHVER:=4.14/g' openwrt/target/linux/x86/Makefile
         [ -e $CONFIG_FILE_OLD ] && mv $CONFIG_FILE_OLD $CONFIG_FILE
 
-    - name: Update feeds
-      run: cd openwrt && ./scripts/feeds update -a
-
-    - name: Install feeds
-      run: cd openwrt && ./scripts/feeds install -a
+    - name: Configure feeds
+      run: |
+        cd openwrt
+        sed -i 's/src-git helloworld/#src-git helloworld/' feeds.conf.default
+        ./scripts/feeds update -a
+        ./scripts/feeds install -a
 
     - name: Load custom configuration
       run: |
+        chmod +x custom.sh
+        bash custom.sh
         [ -e files ] && mv files openwrt/files
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
 
