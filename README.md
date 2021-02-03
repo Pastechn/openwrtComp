@@ -15,5 +15,3 @@
 - SuLingGG
 
 - Project OpenWrt
-
-以上排名不分先后
