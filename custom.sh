@@ -14,5 +14,6 @@ rm -r luci-theme-argon
 git clone https://github.com/jerrykuku/luci-theme-argon
 
 # Hello world
+# Not included in config
 git clone https://github.com/jerrykuku/luci-app-vssr
 git clone https://github.com/jerrykuku/lua-maxminddb
